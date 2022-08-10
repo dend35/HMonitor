@@ -1,6 +1,8 @@
-﻿using Web;
+﻿using MyApp.ServiceModel.Hubs;
+using Web;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -13,5 +15,5 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 app.UseServiceStack(new AppHost());
-
+app.MapHub<HMonitorHub>("/monitor");
 app.Run();
