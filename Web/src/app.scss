@@ -1,7 +1,14 @@
 $navbar-background: #41B883;
 $emphasis-text-color: #35495E;
 
-body {
+html, body{
+    
+    overflow:hidden;
+    background-color: #262626;
+}
+.v-app {
+    background-color: #262626 !important;
+    overflow:hidden;
 }
 .navbar {
     border-radius: 0;
@@ -12,4 +19,7 @@ a {
 }
 a:hover {
     text-decoration: none;
+}
+::-webkit-scrollbar {
+    width: 0px;
 }

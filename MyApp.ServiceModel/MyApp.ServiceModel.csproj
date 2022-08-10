@@ -1,12 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Hardware.Info" Version="10.0.1" />
+    <PackageReference Include="HardwareProviders.CPU.Standard" Version="2.0.1" />
+    <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-    <PackageReference Include="OpenHardwareMonitor.Core" Version="0.8.0.5" />
     <PackageReference Include="ServiceStack.Interfaces" Version="6.*" />
   </ItemGroup>
 

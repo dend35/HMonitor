@@ -1,12 +1,8 @@
 <template>
-  <v-app>
+  <v-app class="v-app">
     <v-main>
-      <v-container fluid>
-        <v-slide-y-transition mode="out-in">
-          <v-layout column align-center>
-            <router-view></router-view>
-          </v-layout>
-        </v-slide-y-transition>
+      <v-container fluid style="overflow: hidden;">
+        <router-view></router-view>
       </v-container>
     </v-main>
   </v-app>
