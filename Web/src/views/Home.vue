@@ -1,11 +1,9 @@
 <!--suppress ES6ShorthandObjectProperty -->
 <template>
-  <div>
-    <v-card min-width="900" dark style="padding: 0px 20px 20px;">
-      <v-card-title>
-      </v-card-title>
-<!--      <div style="width: 600px">{{ computer }}</div>-->
-      <v-row>
+  <div style="height: 95vh; display: flex; flex-direction: column; align-items: center">
+    <v-card :color="panelColor" min-width="100%" dark style="padding: 0 20px 20px;">
+      <!--      <div style="width: 600px">{{ computer }}</div>-->
+      <v-row id="Metrics">
         <v-col cols="6">
           <div class="mt-3">
             <span>CPU: {{ Math.round(computer.cpuLoad) }}%</span>
@@ -18,7 +16,7 @@
             </v-progress-linear>
             <v-progress-linear
                 :value="computer.cpuTemp"
-                color="#ee204d"
+                :color="computeTempColor(computer.cpuTemp)"
                 height="20"
                 rounded
             >
@@ -32,22 +30,22 @@
                 height="20"
                 rounded
             >
-              {{ Math.round(computer.ramUsed*100)/100 }} Gb
+              {{ Math.round(computer.ramUsed * 100) / 100 }} Gb
             </v-progress-linear>
           </div>
           <div class="mt-3">
             <span>NET: {{  }}</span>
             <br>
             <span style="width: 200px">
-              D: {{Math.round(computer.downSpeed/1024/1024*100)/100}} Mbs
+              D: {{ Math.round(computer.downSpeed / 1024 / 1024 * 100) / 100 }} Mbs
             </span>
             <span>
-              {{Math.round(computer.downBytes)}} Gb
+              {{ Math.round(computer.downBytes * 100) / 100 }} Gb
             </span>
             <v-divider></v-divider>
             <span>
-              U: {{Math.round(computer.upSpeed/1024/1024*100)/100}} Mbs
-               {{Math.round(computer.upBytes)}} Gb
+              U: {{ Math.round(computer.upSpeed / 1024 / 1024 * 100) / 100 }} Mbs
+               {{ Math.round(computer.upBytes * 100) / 100}} Gb
             </span>
           </div>
         </v-col>
@@ -63,7 +61,7 @@
             </v-progress-linear>
             <v-progress-linear
                 :value="computer.gpuTemp"
-                color="#ee204d"
+                :color="computeTempColor(computer.gpuTemp)"
                 height="20"
                 rounded
             >
@@ -71,13 +69,38 @@
             </v-progress-linear>
           </div>
           <div v-if="computer.fps > 0" class="mt-3">
-            FPS: {{computer.fps}}
+            FPS: {{ computer.fps }}
           </div>
         </v-col>
       </v-row>
     </v-card>
+    <v-row id="Buttons">
 
-
+    </v-row>
+    <v-row></v-row>
+    <v-card dark :color="panelColor" elevation="10" style="position: absolute; bottom: 10px; right: 10px; ">
+      <div>
+        <v-btn class="ma-1" height="60" @click="controlHub.invoke(`Prev`)">
+          <v-icon>mdi-skip-backward</v-icon>
+        </v-btn>
+        <v-btn class="ma-1" height="60" @click="controlHub.invoke(`Next`)">
+          <v-icon>mdi-skip-forward</v-icon>
+        </v-btn>
+      </div>
+      <v-btn class="ma-1" style="width: 95%" height="60" @click="controlHub.invoke(`Play`)">
+        <v-icon>mdi-play-pause</v-icon>
+      </v-btn>
+    </v-card>
+    <v-card dark :color="panelColor" style="position: absolute; bottom: 10px; left: 10px">
+      <v-btn class="ma-1" height="50" width="50" @click="controlHub.invoke(`PlayDota`)">
+        <v-img 
+            src="@/assets/img/dota.png"
+            width="50"
+            height="50"
+        >
+        </v-img >
+      </v-btn>
+    </v-card>
   </div>
 </template>
 
@@ -89,6 +112,7 @@ import {HubConnectionBuilder} from '@microsoft/signalr';
   components: {}
 })
 export default class Home extends Vue {
+  panelColor = "rgb(0, 0, 0, 0.5)"
   public computer = {
     cpuLoad: 0,
     gpuLoad: 0,
@@ -103,25 +127,44 @@ export default class Home extends Vue {
     downBytes: 0,
     upBytes: 0,
   };
+  monitorHub = new HubConnectionBuilder()
+      .withUrl("/monitor")
+      .build();
+  controlHub = new HubConnectionBuilder()
+      .withUrl("/control")
+      .build();
 
   async created() {
-    let connection = new HubConnectionBuilder()
-        .withUrl("/monitor")
-        .build();
-    connection.on("HardwareInfoSender", (data: any) => {
+    this.monitorHub.on("HardwareInfoSender", (data: any) => {
       this.computer = data;
     });
-    await this.connect(connection)
+    this.monitorHub.onclose(async () => {
+      await this.connect(this.monitorHub);
+    });
+    this.controlHub.onclose(async () => {
+      await this.connect(this.controlHub);
+    });
+    await this.connect(this.monitorHub, (connection: any) => connection.invoke("RunHardwareInfoSender"))
+    await this.connect(this.controlHub)
   }
 
-  async connect(connection:any) {
+  async connect(connection: any, action: any = null) {
     try {
       await connection.start()
-      await connection.invoke("RunHardwareInfoSender")
-    }catch (e){
+      if (action !== null)
+        await action(connection)
+    } catch (e) {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      await this.connect(connection)
+      await this.connect(connection, action)
     }
+  }
+  computeTempColor(value:Number){
+    let alertColor = "#ee204d"
+    let color = "#009900"
+    if(value>80)
+      return alertColor
+    else 
+      return color
   }
 }
 </script>

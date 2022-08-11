@@ -1,5 +1,5 @@
 <template>
-  <v-app class="v-app">
+  <v-app>
     <v-main>
       <v-container fluid style="overflow: hidden;">
         <router-view></router-view>
@@ -26,3 +26,16 @@ export default class AppComponent extends Vue {
     public name = '';
 }
 </script>
+<style scoped>
+.firefly{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 0.4vw;
+  height: 0.4vw;
+  margin: -0.2vw 0 0 9.8vw;
+  animation: ease 200s alternate infinite;
+  pointer-events: none;
+}
+
+</style>

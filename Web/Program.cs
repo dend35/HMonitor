@@ -16,4 +16,5 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseServiceStack(new AppHost());
 app.MapHub<HMonitorHub>("/monitor");
+app.MapHub<ControlHub>("/control");
 app.Run();

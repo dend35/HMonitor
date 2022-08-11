@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageReference Include="Hardware.Info" Version="10.0.1" />
     <PackageReference Include="HardwareProviders.CPU.Standard" Version="2.0.1" />
+    <PackageReference Include="InputSimulator" Version="1.0.4" />
     <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="ServiceStack.Interfaces" Version="6.*" />

@@ -6,8 +6,10 @@ html, body{
     overflow:hidden;
     background-color: #262626;
 }
-.v-app {
-    background-color: #262626 !important;
+#app {
+    background-color: #262626 ;
+    background-image: url('assets/img/bg.png');
+    background-size: cover;
     overflow:hidden;
 }
 .navbar {
@@ -21,5 +23,5 @@ a:hover {
     text-decoration: none;
 }
 ::-webkit-scrollbar {
-    width: 0px;
+    width: 0;
 }

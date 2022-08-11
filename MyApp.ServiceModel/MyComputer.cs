@@ -17,8 +17,6 @@ namespace MyApp.ServiceModel
 		public float DownSpeed { get; set; }
 		public float UpBytes { get; set; }
 		public float DownBytes { get; set; }
-		
-		
-		
+
 	}
 }
