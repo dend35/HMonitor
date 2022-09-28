@@ -1,6 +1,6 @@
 <!--suppress ES6ShorthandObjectProperty -->
 <template>
-  <div style="height: 95vh; display: flex; flex-direction: column; align-items: center">
+  <div style="display: flex; flex-direction: column; align-items: center">
     <v-card :color="panelColor" min-width="100%" dark style="padding: 0 20px 20px;">
       <!--      <div style="width: 600px">{{ computer }}</div>-->
       <v-row id="Metrics">
@@ -69,7 +69,7 @@
             </v-progress-linear>
           </div>
           <div v-if="computer.fps > 0" class="mt-3">
-            FPS: {{ computer.fps }}
+            FPS: {{ Math.round(computer.fps) }}
           </div>
         </v-col>
       </v-row>
@@ -92,7 +92,7 @@
       </v-btn>
     </v-card>
     <v-card dark :color="panelColor" style="position: absolute; bottom: 10px; left: 10px">
-      <v-btn class="ma-1" height="50" width="50" @click="controlHub.invoke(`PlayDota`)">
+      <v-btn class="ma-1" height="50" width="50" @click="controlHub.invoke(`PlayDota`)"> 
         <v-img 
             src="@/assets/img/dota.png"
             width="50"
@@ -135,6 +135,7 @@ export default class Home extends Vue {
       .build();
 
   async created() {
+    setTimeout(() => {window.location.reload();}, 60 * 60 * 1000)
     this.monitorHub.on("HardwareInfoSender", (data: any) => {
       this.computer = data;
     });
